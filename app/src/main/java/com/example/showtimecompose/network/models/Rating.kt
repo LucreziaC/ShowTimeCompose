@@ -1,4 +1,4 @@
-package com.example.showtimecompose.repository.models
+package com.example.showtimecompose.network.models
 
 import kotlinx.serialization.Serializable
 

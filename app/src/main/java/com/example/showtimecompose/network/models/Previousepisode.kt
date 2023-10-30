@@ -1,8 +1,8 @@
-package com.example.showtimecompose.repository.models
+package com.example.showtimecompose.network.models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Self(
+data class Previousepisode(
     val href: String
 )

@@ -1,4 +1,4 @@
-package com.example.showtimecompose.repository.models
+package com.example.showtimecompose.network.models
 
 import kotlinx.serialization.Serializable
 
@@ -9,11 +9,11 @@ data class ShowsListItem(
     val dvdCountry: DvdCountry,
     val ended: String,
     val externals: Externals,
-    val genres: List<String>,
+    val genres: List<String>?,
     val id: Int,
-    val image: Image,
+    val image: Image?,
     val language: String,
-    val name: String,
+    val name: String?,
     val network: Network,
     val officialSite: String,
     val premiered: String,

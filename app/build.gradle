@@ -83,11 +83,10 @@ dependencies {
     implementation "io.ktor:ktor-client-logging:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
-    implementation 'ch.qos.logback:logback-classic:1.4.7'
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
     implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
-
-
+    implementation "io.ktor:ktor-serialization-gson:$ktor_version"
 
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.48'
@@ -121,6 +120,11 @@ dependencies {
 
     // CardView
     implementation("androidx.cardview:cardview:1.0.0")
+// Paging
+    implementation "androidx.paging:paging-compose:$paging_version"
+
+    implementation "com.google.accompanist:accompanist-pager:$google_accompanist_version"
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
