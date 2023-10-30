@@ -2,10 +2,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'dagger.hilt.android.plugin'
-
+    id 'kotlin-kapt'
 }
 
 android {
@@ -33,6 +32,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        // https://github.com/bumptech/glide/issues/4940
+        lintConfig = file("$rootDir/android-lint.xml")
+        // Affichage sur stdout des erreurs
+        textOutput file('stdout')
+        textReport true
     }
     kotlinOptions {
         jvmTarget = '1.8'
