@@ -1,33 +1,28 @@
 package com.example.showtimecompose.views.home_screen
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.constraintlayout.compose.ConstraintLayout
-
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.AsyncImage
+import com.example.showtimecompose.ui.components.ShowCard
+import okhttp3.internal.assertThreadHoldsLock
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -39,91 +34,108 @@ fun ShowListScreen(
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
+
     ) {
-        if(list == null) return@Surface
-        LazyVerticalGrid(
-            modifier = Modifier
-                .padding(
-                    horizontal = 16.dp
-                ),
-            columns = GridCells.Adaptive(minSize = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            items(list.itemCount) { index ->
-                list[index].let { games ->
-                    //val id = games?.id
-                    val name = games?.name ?: ""
+            if(list == null) return@Surface
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .padding(
+                        horizontal = 16.dp
+                    ),
+                columns = StaggeredGridCells.Fixed(2),
+                //verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalItemSpacing = 4.dp,
 
-                    Card(
-                        onClick ={},
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-
-                            Text(
-                                text = name,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-
-                        }
+                ) {
+                items(list.itemCount) { index ->
+                    list[index].let { show ->
+                        //val id = show?.id
+                        val name = show?.name ?: ""
+                        ShowCard(image=show?.image?.original)
                     }
                 }
-            }
-            list.apply {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    when {
-                        loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                            ConstraintLayout(
-                            ) {
-                                val (
-                                    loadingCircular,
-                                ) = createRefs()
-                                CircularProgressIndicator(
+                list.apply {
+                    item(
+                        span= StaggeredGridItemSpan.FullLine
+                    ) {
+
+                        when {
+                            loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                                Column(
                                     modifier = Modifier
-                                        .constrainAs(loadingCircular){
-                                            start.linkTo(parent.start)
-                                            top.linkTo(parent.top)
-                                            bottom.linkTo(parent.bottom)
-                                            end.linkTo(parent.end)
-                                        },
-                                )
-                            }
-                        }
-                        loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
-                            ConstraintLayout(
-                            ) {
-                                val (
-                                    buttonText,
-                                ) = createRefs()
-                                TextButton(
-                                    modifier = Modifier
-                                        .constrainAs(buttonText){
-                                            start.linkTo(parent.start)
-                                            top.linkTo(parent.top)
-                                            bottom.linkTo(parent.bottom)
-                                            end.linkTo(parent.end)
-                                        },
-                                    border = BorderStroke(
-                                        1.dp,
-                                        Color.Blue,
-                                    ),
-                                    onClick = {},
-                                ){
-                                    Text(text = "errrore")
+                                        .fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                ) {
+
+                                    CircularProgressIndicator(color = Color.Black)
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(8.dp),
+                                        text = "Loading..."
+                                    )
                                 }
                             }
+                            loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                                ConstraintLayout(
+                                ) {
+                                    val (
+                                        buttonText,
+                                    ) = createRefs()
+                                    TextButton(
+                                        modifier = Modifier
+                                            .constrainAs(buttonText){
+                                                start.linkTo(parent.start)
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                end.linkTo(parent.end)
+                                            },
+                                        border = BorderStroke(
+                                            1.dp,
+                                            Color.Blue,
+                                        ),
+                                        onClick = {},
+                                    ){
+                                        Text(text = "errore")
+                                    }
+                                }
+                            }
+                            else -> {
+                                ConstraintLayout(
+                                ) {
+                                    val (
+                                        buttonText,
+                                    ) = createRefs()
+                                    TextButton(
+                                        modifier = Modifier
+                                            .constrainAs(buttonText){
+                                                start.linkTo(parent.start)
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                end.linkTo(parent.end)
+                                            },
+                                        border = BorderStroke(
+                                            1.dp,
+                                            Color.Blue,
+                                        ),
+                                        onClick = {},
+                                    ){
+                                        Text(text = "errore")
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
             }
         }
-    }
 
-}
+    }}
+
+

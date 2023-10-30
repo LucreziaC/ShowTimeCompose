@@ -88,6 +88,7 @@ dependencies {
     implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
     implementation "io.ktor:ktor-serialization-gson:$ktor_version"
 
+
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.48'
     kapt 'com.google.dagger:hilt-compiler:2.48'
@@ -112,8 +113,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
 
     // OkHttp
     implementation('com.squareup.okhttp3:okhttp:5.0.0-alpha.2')
