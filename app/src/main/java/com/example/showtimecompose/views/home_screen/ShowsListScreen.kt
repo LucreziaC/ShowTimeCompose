@@ -1,12 +1,18 @@
 package com.example.showtimecompose.views.home_screen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
-import androidx.compose.material.*
-import androidx.compose.material3.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +23,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.showtimecompose.ui.components.ErrorComponent
 import com.example.showtimecompose.ui.components.LoadingComponent
+import com.example.showtimecompose.ui.components.SearchBarSample
 import com.example.showtimecompose.ui.components.ShowCard
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
@@ -42,11 +49,11 @@ fun ShowListScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            if(list == null) return@Column
+            SearchBarSample(viewModel)
             LazyVerticalStaggeredGrid(
                 modifier = Modifier
                     .padding(
-                       horizontal =  16.dp
+                        horizontal =  8.dp
                     ),
                 columns = StaggeredGridCells.Fixed(2),
                 //verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -56,16 +63,15 @@ fun ShowListScreen(
                 ) {
                 items(list.itemCount) { index ->
                     list[index].let { show ->
-                        //val id = show?.id
-                        val name = show?.name ?: ""
-                        ShowCard(image=show?.image?.original)
+                        if (show != null) {
+                            ShowCard(show=show,viewModel)
+                        }
                     }
                 }
                 list.apply {
                     item(
                         span= StaggeredGridItemSpan.FullLine
                     ) {
-
                         when {
                             loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                                 LoadingComponent()
@@ -73,12 +79,11 @@ fun ShowListScreen(
                             loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
                                 ErrorComponent()
                             }
-
-
                         }
                     }
                 }
             }
+
         }
 
     }}

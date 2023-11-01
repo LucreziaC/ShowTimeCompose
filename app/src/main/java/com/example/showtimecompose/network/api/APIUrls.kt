@@ -6,5 +6,6 @@ class APIUrls {
     companion object{
         const val BASE_URL = "api.tvmaze.com"
         const val SHOWS_LIST = "/shows"
+        const val SEARCH_LIST = "/search/shows"
     }
 }

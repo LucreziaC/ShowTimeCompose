@@ -3,21 +3,20 @@ package com.example.showtimecompose.views.home_screen
 import ApiResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import com.example.showtimecompose.network.ShowsRepository
-import com.example.showtimecompose.network.api.ApiService
-import com.example.showtimecompose.network.models.ShowsListItem
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.example.showtimecompose.network.ShowsRepository
+import com.example.showtimecompose.network.models.ShowItemModel
 import com.example.showtimecompose.network.models.toDomain
+import com.example.showtimecompose.network.results.ShowsListError
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -25,11 +24,36 @@ class ShowListViewModel @Inject constructor(private val repository: ShowsReposit
                                             ,
                                             private val defaultDispatcher: CoroutineDispatcher
 ): ViewModel() {
-    private val _showList= MutableStateFlow<ApiResult<List<ShowsListItem>>>(ApiResult.Loading())
-    val showList= _showList.asStateFlow()
+    private val _searchList= MutableStateFlow<UIState>(UIState.Default)
+    val searchList= _searchList.asStateFlow()
 
     init {
        // getShows()
+    }
+
+    fun onEvent(event: UIEvent){
+        when(event){
+            is UIEvent.OnSearch -> searchShow(event.query)
+            UIEvent.ResetState -> _searchList.value=UIState.Default
+        }
+    }
+
+      fun searchShow(query: String) {
+        println("searchShow + $query")
+        viewModelScope.launch {
+            repository.getSearchList(query).flowOn(defaultDispatcher).collect() {result->
+                when(result){
+                    is ApiResult.Loading ->{_searchList.value=UIState.Loading}
+                    is ApiResult.Error ->{_searchList.value=UIState.Error(result.error ?: ShowsListError.GenericError("A problem has occured. Try again later"))}
+                    else ->{
+                        val data = result.data?.map{searchListItem->
+                            searchListItem.show.toDomain()
+                        }
+                        _searchList.value=UIState.Content(data ?: emptyList())
+                    }
+                }
+            }
+        }
     }
 
     val showListState =
@@ -38,4 +62,17 @@ class ShowListViewModel @Inject constructor(private val repository: ShowsReposit
                 it.toDomain()
             }
         }.cachedIn(viewModelScope)
+}
+
+sealed class UIEvent{
+    data class OnSearch(val query:String): UIEvent()
+    data object ResetState : UIEvent()
+}
+
+sealed class UIState{
+    data class Content(val data: List<ShowItemModel>):UIState()
+    data class Error(val error:ShowsListError):UIState()
+    data object  Loading: UIState()
+    data object  Default: UIState()
+
 }
