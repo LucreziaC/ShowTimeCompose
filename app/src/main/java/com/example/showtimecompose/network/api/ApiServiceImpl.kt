@@ -38,7 +38,7 @@ class ApiServiceImpl(private val client: HttpClient): ApiService {
             url {
                 protocol = URLProtocol.HTTPS
                 host= APIUrls.BASE_URL
-                path("${APIUrls.SEARCH_LIST}/${showId}")
+                path("${APIUrls.SHOWS_LIST}/${showId}")
             }
         }.body()
         return response    }

@@ -33,7 +33,7 @@ fun AppNavHost(
                 },
             )
         ) { backStackEntry ->
-            ShowDetailScreen(backStackEntry.arguments?.getString("showId"))
+            backStackEntry.arguments?.getString("showId")?.let { ShowDetailScreen(it) }
         }
     }
 }

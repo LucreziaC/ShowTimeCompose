@@ -8,7 +8,7 @@ import androidx.paging.map
 import com.example.showtimecompose.network.ShowsRepository
 import com.example.showtimecompose.network.models.ShowItemModel
 import com.example.showtimecompose.network.models.toDomain
-import com.example.showtimecompose.network.results.ShowsListError
+import com.example.showtimecompose.network.results.ShowError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,12 +39,11 @@ class ShowListViewModel @Inject constructor(private val repository: ShowsReposit
     }
 
       fun searchShow(query: String) {
-        println("searchShow + $query")
         viewModelScope.launch {
             repository.getSearchList(query).flowOn(defaultDispatcher).collect() {result->
                 when(result){
                     is ApiResult.Loading ->{_searchList.value=UIState.Loading}
-                    is ApiResult.Error ->{_searchList.value=UIState.Error(result.error ?: ShowsListError.GenericError("A problem has occured. Try again later"))}
+                    is ApiResult.Error ->{_searchList.value=UIState.Error(result.error ?: ShowError.GenericError("A problem has occured. Try again later"))}
                     else ->{
                         val data = result.data?.map{searchListItem->
                             searchListItem.show.toDomain()
@@ -71,7 +70,7 @@ sealed class UIEvent{
 
 sealed class UIState{
     data class Content(val data: List<ShowItemModel>):UIState()
-    data class Error(val error:ShowsListError):UIState()
+    data class Error(val error:ShowError):UIState()
     data object  Loading: UIState()
     data object  Default: UIState()
 
