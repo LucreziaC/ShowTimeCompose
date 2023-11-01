@@ -23,21 +23,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.example.showtimecompose.navigation.NavigationItem
 import com.example.showtimecompose.network.models.ShowItemModel
 import com.example.showtimecompose.views.home_screen.ShowListViewModel
+import com.example.showtimecompose.views.home_screen.UIEvent
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ShowCard(show: ShowItemModel, viewModel: ShowListViewModel) {
+fun ShowCard(show: ShowItemModel, viewModel: ShowListViewModel, navController:NavController) {
     val selected = remember { mutableStateOf(false) }
     return Card(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(13.dp),
-        onClick = { viewModel.searchShow("t") },
+        onClick = {
+            navController.navigate("${NavigationItem.Detail.route}?id=${show.id}")
+        },
     ) {
         Box(
             modifier = Modifier
