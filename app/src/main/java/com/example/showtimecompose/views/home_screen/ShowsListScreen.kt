@@ -1,9 +1,6 @@
 package com.example.showtimecompose.views.home_screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -23,7 +20,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.showtimecompose.ui.components.ErrorComponent
 import com.example.showtimecompose.ui.components.LoadingComponent
-import com.example.showtimecompose.ui.components.SearchBarSample
+import com.example.showtimecompose.ui.components.SearchBarComponent
 import com.example.showtimecompose.ui.components.ShowCard
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
@@ -47,44 +44,50 @@ fun ShowListScreen(
                 paddingValues
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            SearchBarSample(viewModel)
-            LazyVerticalStaggeredGrid(
-                modifier = Modifier
-                    .padding(
-                        horizontal =  8.dp
-                    ),
-                columns = StaggeredGridCells.Fixed(2),
-                //verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalItemSpacing = 4.dp,
 
-                ) {
-                items(list.itemCount) { index ->
-                    list[index].let { show ->
-                        if (show != null) {
-                            ShowCard(show=show,viewModel)
-                        }
-                    }
-                }
-                list.apply {
-                    item(
-                        span= StaggeredGridItemSpan.FullLine
+            ){
+            SearchBarComponent(viewModel)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(
+                            horizontal =  8.dp
+                        ),
+                    columns = StaggeredGridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalItemSpacing = 4.dp,
+
                     ) {
-                        when {
-                            loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                                LoadingComponent()
+                    items(list.itemCount) { index ->
+                        list[index].let { show ->
+                            if (show != null) {
+                                ShowCard(show=show,viewModel)
                             }
-                            loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
-                                ErrorComponent()
+                        }
+                    }
+                    list.apply {
+                        item(
+                            span= StaggeredGridItemSpan.FullLine
+                        ) {
+                            when {
+                                loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                                    LoadingComponent()
+                                }
+                                loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                                    ErrorComponent()
+                                }
                             }
                         }
                     }
                 }
-            }
 
+            }
         }
+
 
     }}
 

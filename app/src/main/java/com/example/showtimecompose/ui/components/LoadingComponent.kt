@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingComponent(){
+fun LoadingComponent(modifier:Modifier? = null){
     return Column(
-        modifier = Modifier
+        modifier = modifier?: Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
