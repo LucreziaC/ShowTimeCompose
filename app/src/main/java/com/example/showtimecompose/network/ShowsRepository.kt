@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface ShowsRepository {
      fun getShowsList(): Flow<PagingData<ShowsListItem>>
      fun getSearchList(query:String): Flow<ApiResult<List<SearchListItem>>>
+     fun getShowDetails(showId:String): Flow<ApiResult<ShowsListItem>>
     //suspend fun loadShowDetail(name: String): Flow<DataState<List<Show>>>
 
 }

@@ -2,6 +2,7 @@ package com.example.showtimecompose.network.api
 
 import com.example.showtimecompose.network.models.SearchList
 import com.example.showtimecompose.network.models.ShowsList
+import com.example.showtimecompose.network.models.ShowsListItem
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -31,5 +32,15 @@ class ApiServiceImpl(private val client: HttpClient): ApiService {
         }.body()
         return response
     }
+
+    override suspend fun getShowDetails(showId: String): ShowsListItem {
+        val response:ShowsListItem= client.get{
+            url {
+                protocol = URLProtocol.HTTPS
+                host= APIUrls.BASE_URL
+                path("${APIUrls.SEARCH_LIST}/${showId}")
+            }
+        }.body()
+        return response    }
 
 }

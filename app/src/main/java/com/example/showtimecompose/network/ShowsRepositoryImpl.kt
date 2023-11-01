@@ -46,6 +46,18 @@ class ShowsRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getShowDetails(showId: String): Flow<ApiResult<ShowsListItem>> {
+        return flow{
+            try {
+                emit(ApiResult.Loading())
+                val searchResult = apiHelper.getShowDetails(showId)
+                emit(ApiResult.Success(searchResult))
+            }catch (e:Exception){
+                emit(ApiResult.Error(ShowsListError.GenericError(e.message)))
+            }
+        }
+    }
 }
 
 
