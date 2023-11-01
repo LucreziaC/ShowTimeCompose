@@ -3,6 +3,8 @@ buildscript {
         compose_version = '1.5.3'
         ktor_version = '2.3.5'
         kotlin_version = '1.9.0'
+        google_accompanist_version = '0.32.0'
+        paging_version = "3.2.1"
     }
 
     repositories {
