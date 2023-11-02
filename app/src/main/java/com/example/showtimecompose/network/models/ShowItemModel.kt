@@ -9,5 +9,5 @@ data class ShowItemModel (
     val image: Image?=null,
     val genres: List<String>?=null,
     val summary: String?=null,
-    val ended: String?=null,
+    val premiered: String?=null,
     )
