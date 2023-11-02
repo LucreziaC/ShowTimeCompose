@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? = null) {
+fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? = null, title:String?="") {
     return MediumTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -27,7 +27,7 @@ fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? 
         modifier= Modifier.padding(bottom=0.dp),
         title = {
             Text(
-                "It's Show Time!",
+                if(title!=null && title!="")title else "It's Show Time!",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp,
                 maxLines = 1,

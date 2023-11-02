@@ -8,7 +8,7 @@ import com.example.showtimecompose.network.api.ApiHelper
 import com.example.showtimecompose.network.models.SearchListItem
 import com.example.showtimecompose.network.models.ShowsListItem
 import com.example.showtimecompose.network.paging_source.ShowsPagingSource
-import com.example.showtimecompose.network.results.ShowsListError
+import com.example.showtimecompose.network.results.ShowError
 import com.example.showtimecompose.utils.PreferencesHelper
 
 import kotlinx.coroutines.flow.Flow
@@ -37,12 +37,24 @@ class ShowsRepositoryImpl @Inject constructor(
                 emit(ApiResult.Loading())
                 val searchResult = apiHelper.getSearchList(query)
                 if(searchResult.isEmpty()){
-                    emit(ApiResult.Error(ShowsListError.NoShowsFound))
+                    emit(ApiResult.Error(ShowError.NoShowsFound))
                 }else{
                     emit(ApiResult.Success(data=searchResult))
                 }
             }catch (e:Exception){
-                emit(ApiResult.Error(ShowsListError.GenericError(e.message)))
+                emit(ApiResult.Error(ShowError.GenericError(e.message)))
+            }
+        }
+    }
+
+    override fun getShowDetails(showId: String): Flow<ApiResult<ShowsListItem>> {
+        return flow{
+            try {
+                emit(ApiResult.Loading())
+                val searchResult = apiHelper.getShowDetails(showId)
+                emit(ApiResult.Success(searchResult))
+            }catch (e:Exception){
+                emit(ApiResult.Error(ShowError.GenericError(e.message)))
             }
         }
     }

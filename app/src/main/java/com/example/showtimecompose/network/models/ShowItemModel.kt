@@ -4,7 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShowItemModel (
-    val name: String?,
-    val image: Image?,
-    val genres: List<String>?,
-)
+    val id:Int,
+    val name: String? = null,
+    val image: Image?=null,
+    val genres: List<String>?=null,
+    val summary: String?=null,
+    val premiered: String?=null,
+    )

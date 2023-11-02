@@ -30,5 +30,5 @@ data class ShowsListItem(
 )
 
 fun ShowsListItem.toDomain(): ShowItemModel {
-    return ShowItemModel(this.name, this.image, this.genres)
+    return ShowItemModel(this.id,this.name, this.image, this.genres, this.summary, this.premiered)
 }
