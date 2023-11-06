@@ -15,10 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.showtimecompose.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? = null, title:String?="") {
+fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? = null, title:String?="", navController:NavController) {
     return MediumTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -44,12 +46,13 @@ fun TopAppBar(scrollBehavior: TopAppBarScrollBehavior, navigationIcon: Boolean? 
             }
         },
         actions = {
-            IconButton(onClick = { /* do something */ }) {
+            /*IconButton(onClick = {navController.navigate(NavigationItem.Favourites.route)
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Favorite,
                     contentDescription = "Localized description"
                 )
-            }
+            }*/
         },
         scrollBehavior = scrollBehavior
     )

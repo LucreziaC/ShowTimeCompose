@@ -11,6 +11,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     private val  mSharedPreferences : SharedPreferences = context.getSharedPreferences("SHOWTIME", Context.MODE_PRIVATE)
     private val  mEditor: SharedPreferences.Editor = mSharedPreferences.edit();
 
+    val preferencesKey = "PREFERENCES_KEY"
+
 
     fun  getStringPreference( key:String): String? {
         return mSharedPreferences.getString(key , null);

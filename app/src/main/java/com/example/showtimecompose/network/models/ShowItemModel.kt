@@ -10,4 +10,5 @@ data class ShowItemModel (
     val genres: List<String>?=null,
     val summary: String?=null,
     val premiered: String?=null,
+    var preferred:Boolean = false
     )

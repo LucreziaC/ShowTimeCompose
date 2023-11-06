@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.showtimecompose.views.detail_screen.ShowDetailScreen
+import com.example.showtimecompose.views.favouriteScreen.FavouritesScreen
 import com.example.showtimecompose.views.home_screen.ShowListScreen
 
 @Composable
@@ -34,6 +35,9 @@ fun AppNavHost(
             )
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("showId")?.let { ShowDetailScreen(it) }
+        }
+        composable(NavigationItem.Favourites.route) {
+            FavouritesScreen(navController=navController)
         }
     }
 }

@@ -10,10 +10,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -86,15 +84,20 @@ fun ShowCard(show: ShowItemModel, viewModel: ShowListViewModel, navController:Na
                 contentAlignment = Alignment.Center
             )
             {
-                Icon(
+                /*Icon(
                     imageVector = if (!selected.value) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
                     contentDescription = "Favorite Icon",
                     modifier = Modifier.padding(4.dp).clip(CircleShape).clickable {
                         selected.value = !selected.value
+                        if(selected.value){//added to favourites
+                            viewModel.onEvent(UIEvent.AddToFavourite(show))
+                        }else{
+                            viewModel.onEvent(UIEvent.RemoveFromFavourite(show))
+
+                        }
                         println("Selected: $selected")
                     }
-                )
-
+                )*/
             }
 
         }

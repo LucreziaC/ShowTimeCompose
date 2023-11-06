@@ -1,12 +1,9 @@
 package com.example.showtimecompose.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
+import android.os.CountDownTimer
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -28,6 +25,11 @@ import androidx.navigation.NavController
 import com.example.showtimecompose.views.home_screen.ShowListViewModel
 import com.example.showtimecompose.views.home_screen.UIEvent
 import com.example.showtimecompose.views.home_screen.UIState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +70,7 @@ fun SearchBarComponent(
         },
 
         ) {
-        when (val state = viewModel.searchList.collectAsStateWithLifecycle().value) {
+        when (val state = viewModel.showsState.collectAsStateWithLifecycle().value) {
             is UIState.Loading -> {
                 LoadingComponent()
             }
@@ -79,20 +81,7 @@ fun SearchBarComponent(
                         horizontal = 8.dp
                     ),) {
                     Text(text="Results: ", modifier=Modifier.padding(vertical=25.dp))
-                    LazyVerticalStaggeredGrid(
-
-                        columns = StaggeredGridCells.Fixed(2),
-                        //verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalItemSpacing = 4.dp,
-
-                        ) {
-                        items(state.data) { showItemModel ->
-                            ShowCard(show = showItemModel, viewModel, navController)
-
-                        }
-
-                    }
+                    ShowsList(state.data, viewModel, navController)
                 }
 
             }
@@ -107,6 +96,8 @@ fun SearchBarComponent(
         }
     }
 }
+
+
 
 fun sendQueryToSearch(viewModel: ShowListViewModel, query: String) {
     if (query.isEmpty() || query.isBlank()) {
